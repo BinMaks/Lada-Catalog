@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}{{ model.name }} — Каталог запчастей{% endblock %}
+
+{% block content %}
+<section class="model-header">
+    <div class="container">
+        <nav class="breadcrumbs">
+            <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Главная</a>
+            <span>/</span>
+            <span>{{ model.name }}</span>
+        </nav>
+        <div class="model-header-content">
+            <div class="model-header-image">
+                <img src="{{ model.image }}" alt="{{ model.name }}">
+            </div>
+            <div class="model-header-info">
+                <h1>{{ model.name }}</h1>
+                <span class="model-years-badge">{{ model.years }}</span>
+                <p class="model-description">{{ model.description }}</p>
+                <div class="model-stats">
+                    <span><i class="fas fa-cogs"></i> {{ model.parts|length }} запчастей</span>
+                    <span><i class="fas fa-folder"></i> {{ categories|length }} категорий</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="catalog-section">
+    <div class="container">
+        <div class="catalog-layout">
+            <aside class="filters-sidebar">
+                <div class="filters-block">
+                    <h3><i class="fas fa-filter"></i> Фильтры</h3>
+
+                    <div class="filter-group">
+                        <h4>Категория</h4>
+                        <div class="filter-options" id="category-filters">
+                            <label class="filter-option active">
+                                <input type="radio" name="category" value="all" checked>
+                                <span>Все категории</span>
+                            </label>
+                            {% for category in categories %}
+                            <label class="filter-option">
+                                <input type="radio" name="category" value="{{ category }}">
+                                <span>{{ category }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Наличие</h4>
+                        <div class="filter-options">
+                            <label class="filter-option active">
+                                <input type="radio" name="stock" value="all" checked>
+                                <span>Все</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="stock" value="in_stock">
+                                <span>В наличии</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Цена</h4>
+                        <div class="price-range">
+                            <input type="number" id="price-min" placeholder="От" min="0">
+                            <span>—</span>
+                            <input type="number" id="price-max" placeholder="До" min="0">
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="catalog-content">
+                <div class="catalog-toolbar">
+                    <div class="catalog-search">
+                        <input type="text" id="catalog-search" placeholder="Поиск по названию или артикулу...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="catalog-sort">
+                        <select id="sort-select">
+                            <option value="name">По названию</option>
+                            <option value="price_asc">Цена: по возрастанию</option>
+                            <option value="price_desc">Цена: по убыванию</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="parts-grid" class="parts-grid">
+                    {% for part in model.parts %}
+                    <div class="part-card"
+                         data-category="{{ part.category }}"
+                         data-price="{{ part.price }}"
+                         data-name="{{ part.name }}"
+                         data-article="{{ part.article }}"
+                         data-stock="{{ 'in_stock' if part.in_stock else 'out_of_stock' }}">
+                        <div class="part-image">
+                            <div class="part-image-placeholder">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            {% if not part.in_stock %}
+                            <span class="part-badge out-of-stock">Нет в наличии</span>
+                            {% else %}
+                            <span class="part-badge in-stock">В наличии</span>
+                            {% endif %}
+                        </div>
+                        <div class="part-info">
+                            <span class="part-category">{{ part.category }}</span>
+                            <h4 class="part-name">{{ part.name }}</h4>
+                            <span class="part-article">Артикул: {{ part.article }}</span>
+                            <div class="part-footer">
+                                <span class="part-price">{{ "{:,}".format(part.price).replace(",", " ") }} ₽</span>
+                                {% if part.in_stock %}
+                                <button class="add-to-cart-btn" onclick="addToCart('{{ part.id }}', '{{ part.name }}', {{ part.price }}, '{{ part.article }}', '{{ model.name }}')">
+                                    <i class="fas fa-plus"></i> В корзину
+                                </button>
+                                {% else %}
+                                <button class="add-to-cart-btn disabled" disabled>
+                                    <i class="fas fa-clock"></i> Под заказ
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div id="no-results" class="no-results" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <p>Запчасти не найдены</p>
+                    <span>Попробуйте изменить параметры поиска или фильтры</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    window.modelParts = {{ model.parts|tojson }};
+    window.modelName = "{{ model.name }}";
+</script>
+{% endblock %}
