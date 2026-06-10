@@ -23,7 +23,8 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #e3f2fd;
+    background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+               url('/static/images/GosProg_112023 (1).webp');
     color: var(--text);
     line-height: 1.6;
 }
@@ -243,10 +244,14 @@ body {
 
 .section-title {
     text-align: center;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    color: var(--secondary);
+    background: linear-gradient(90deg, #e0e0e0 0%, #ffffff 25%, #c0c0c0 50%, #ffffff 75%, #a0a0a0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px rgba(192,192,192,0.5));
     margin-bottom: 40px;
+
 }
 
 .models-grid {

@@ -7,7 +7,7 @@ lada_data = {
     "vesta": {
         "name": "LADA Vesta",
         "years": "2015 — настоящее время",
-        "image": "https://simferopol.autosalon.shop/files/Image/Gallery/resize/73b99d51e4461e540a81f3cd4d8c5140_resize_600_600.png",
+        "image": "https://avatars.mds.yandex.net/get-autoru-vos/18005086/8eb1b3458c30a5d3d7aba220d7585bdb/1200x900",
         "description": "Седан и универсал семейного класса. Один из самых популярных автомобилей LADA в России.",
         "parts": [
             {"id": "v001", "name": "Масляный фильтр", "category": "Фильтры", "price": 350, "article": "V-001-OF", "in_stock": True, "image": "https://cdn1.ozone.ru/s3/multimedia-6/6417369102.jpg"},
